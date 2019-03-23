@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { onClickMenu } from "../actions/";
+import { CharsOrPlanets } from "../actions/";
 import "./Header.css";
 
 class Header extends React.Component {
@@ -11,13 +12,19 @@ class Header extends React.Component {
           <div className="container">Star Wars Fun</div>
           <button
             className="ui black button centered"
-            onClick={() => this.props.onClickMenu(this.props.SWPlanets)}
+            onClick={() => {
+              this.props.CharsOrPlanets("planets");
+              this.props.onClickMenu(this.props.SWPlanets);
+            }}
           >
             Planets
           </button>
           <button
             className="ui black button centered"
-            onClick={() => this.props.onClickMenu(this.props.SWChars)}
+            onClick={() => {
+              this.props.CharsOrPlanets("chars");
+              this.props.onClickMenu(this.props.SWChars);
+            }}
           >
             Characters
           </button>
@@ -28,17 +35,22 @@ class Header extends React.Component {
     );
   }
 }
-
+//onClick={(favorite)=>{
+//this.handleSubmit(favorite);
+//this.handleName(favorite);
+//}
 const mapStateToProps = state => {
   return {
     SWChars: state.SWChars,
-    SWPlanets: state.SWPlanets
+    SWPlanets: state.SWPlanets,
+    CharsOrPlanets: state.CharsOrPlanets
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    onClickMenu: onClickMenu
+    onClickMenu: onClickMenu,
+    CharsOrPlanets: CharsOrPlanets
   }
 )(Header);

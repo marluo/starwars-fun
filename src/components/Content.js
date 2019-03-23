@@ -2,15 +2,25 @@ import React from "react";
 import { connect } from "react-redux";
 import { fetchSWCharacters } from "../actions/";
 import { fetchSWPlanets } from "../actions";
+import { CharsOrPlanets } from "../actions";
+import ContentCard from "./ContentCard";
 
 class Content extends React.Component {
   componentDidMount() {
     this.props.fetchSWCharacters();
+    //kör actionen som fetchar karaktärer 2x från APIn
     this.props.fetchSWPlanets();
+
+    this.state = {
+      Characters: false
+    };
+    //kör actionen som fetchar planeter 2x från apin
   }
 
   renderCharacters() {
+    console.log("testing", this.props);
     if (!this.props.SWChars[0]) {
+      //kollar om det SWChars har ett värde i sig, om den inte har det blir den false, alltså visas detta.
       return (
         <div className="container">
           <div className="ui two column centered grid">
@@ -22,6 +32,7 @@ class Content extends React.Component {
       );
     }
     if (!this.props.number[0] && !this.props.number[1]) {
+      //detta visas om vi inte har passat in number något value via knapparna, då arrayen inte har några värden
       return (
         <div className="ui two column centered grid">
           Please Select an Option
@@ -30,16 +41,20 @@ class Content extends React.Component {
     }
 
     if (this.props.number[0] && this.props.number[1]) {
+      //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
       const SWCharsMerged = [...this.props.number[0], ...this.props.number[1]];
       console.log("fattaru", SWCharsMerged);
       return SWCharsMerged.map(char => {
-        return <div className="four wide column">{char.name}</div>;
+        return (
+          <ContentCard char={char} charsOrPlanets={this.props.renderState} />
+        );
       });
     }
   }
   render() {
+    //rendererar ut karaktärerna, loading och om man ska välja en option
     console.log("peppe", this.props.SWChars);
-    return <div className="ui grid">{this.renderCharacters()} </div>;
+    return <div className="ui cards">{this.renderCharacters()} </div>;
   }
 }
 
@@ -47,7 +62,8 @@ const mapStateToProps = state => {
   return {
     number: state.number,
     SWChars: state.SWChars,
-    SWPlanets: state.SWPlanets
+    SWPlanets: state.SWPlanets,
+    renderState: state.CharsOrPlanets
     //vi får nu alla karaktärer från staten som vi hämtar via actionen. Vi använder denna för att
     //mappa alla ut på skärmen
   };
@@ -56,7 +72,9 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
+    //passar in actionen i denna komponent
     fetchSWCharacters: fetchSWCharacters,
-    fetchSWPlanets: fetchSWPlanets
+    fetchSWPlanets: fetchSWPlanets,
+    CharsOrPlanets: CharsOrPlanets
   }
 )(Content);
