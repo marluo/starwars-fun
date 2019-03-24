@@ -10,16 +10,13 @@ class Content extends React.Component {
     this.props.fetchSWCharacters();
     //kör actionen som fetchar karaktärer 2x från APIn
     this.props.fetchSWPlanets();
-
-    this.state = {
-      Characters: false
-    };
     //kör actionen som fetchar planeter 2x från apin
   }
 
   renderCharacters() {
-    console.log("testing", this.props);
-    if (!this.props.SWChars[0]) {
+    console.log("triumf", this.props.fetchChecker);
+    console.log("testing KAKAKAKA", this.props.SWChars[0]);
+    if (!this.props.fetchChecker) {
       //kollar om det SWChars har ett värde i sig, om den inte har det blir den false, alltså visas detta.
       return (
         <div className="container">
@@ -31,7 +28,7 @@ class Content extends React.Component {
         </div>
       );
     }
-    if (!this.props.number[0] && !this.props.number[1]) {
+    if (!this.props.number[0]) {
       //detta visas om vi inte har passat in number något value via knapparna, då arrayen inte har några värden
       return (
         <div className="ui two column centered grid">
@@ -40,13 +37,17 @@ class Content extends React.Component {
       );
     }
 
-    if (this.props.number[0] && this.props.number[1]) {
+    if (this.props.fetchChecker) {
       //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
-      const SWCharsMerged = [...this.props.number[0], ...this.props.number[1]];
-      console.log("fattaru", SWCharsMerged);
+      const SWCharsMerged = [...this.props.number];
+      console.log("hej", SWCharsMerged);
       return SWCharsMerged.map(char => {
         return (
-          <ContentCard char={char} charsOrPlanets={this.props.renderState} />
+          <ContentCard
+            char={char}
+            charsOrPlanets={this.props.renderState}
+            fetchChecker={this.props.fetchChecker}
+          />
         );
       });
     }
@@ -63,7 +64,9 @@ const mapStateToProps = state => {
     number: state.number,
     SWChars: state.SWChars,
     SWPlanets: state.SWPlanets,
-    renderState: state.CharsOrPlanets
+    renderState: state.CharsOrPlanets,
+    homeworld: state.homeworld,
+    fetchChecker: state.fetchChecker
     //vi får nu alla karaktärer från staten som vi hämtar via actionen. Vi använder denna för att
     //mappa alla ut på skärmen
   };

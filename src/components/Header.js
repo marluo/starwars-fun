@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { onClickMenu } from "../actions/";
 import { CharsOrPlanets } from "../actions/";
 import "./Header.css";
+import fetchChecker from "../reducers/fetchChecker";
 
 class Header extends React.Component {
   render() {
@@ -43,7 +44,8 @@ const mapStateToProps = state => {
   return {
     SWChars: state.SWChars,
     SWPlanets: state.SWPlanets,
-    CharsOrPlanets: state.CharsOrPlanets
+    CharsOrPlanets: state.CharsOrPlanets,
+    fetchChecker: state.fetchChecker
   };
 };
 
