@@ -28,7 +28,7 @@ class Content extends React.Component {
         </div>
       );
     }
-    if (!this.props.number[0]) {
+    if (!this.props.number) {
       //detta visas om vi inte har passat in number något value via knapparna, då arrayen inte har några värden
       return (
         <div className="ui two column centered grid">
@@ -39,7 +39,7 @@ class Content extends React.Component {
 
     if (this.props.fetchChecker) {
       //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
-      const SWCharsMerged = [...this.props.number];
+      const SWCharsMerged = this.props.number;
       console.log("hej", SWCharsMerged);
       return SWCharsMerged.map(char => {
         return (

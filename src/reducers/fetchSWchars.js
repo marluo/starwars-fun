@@ -3,17 +3,7 @@ import { fetchSWCharacters } from "../actions";
 export default (state = [], action) => {
   switch (action.type) {
     case "FETCH_SW_CHARACTERS":
-      console.log("ererer");
-      return [...state, action.payload];
-    case "CHARS_HOMEWORLD":
-      console.log("heje");
-      return state[0].map((char, index) => {
-        return {
-          ...state[0][index],
-          homeworld: action.payload[index],
-          hasFetched: true
-        };
-      });
+      return action.payload;
     default:
       return state;
   }
