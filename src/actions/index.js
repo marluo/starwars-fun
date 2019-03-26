@@ -1,66 +1,71 @@
 import starwars from "../apis/starwars";
 
 export const fetchSWCharacters = getState => async dispatch => {
-  starwars
-    .get("/people/?format=json")
-    .then(response => {
-      return response.data;
-    })
-    .then(response => {
-      return response.results;
-    })
-    .then(async response => {
-      response.map((guy, index) => {
-        const substring = guy.homeworld.substring(20);
-        return starwars.get(`${substring}?format=json`).then(response => {
-          guy.homeworld = response.data.name;
-          return guy;
-        });
-      });
-      await dispatch({
-        type: "FETCH_SW_CHARACTERS",
-        payload: response
-      });
-      await dispatch({
-        type: "FETCH_COMPLETED",
-        payload: true
-      });
+  const responsefromAPI = await starwars.get("/people/?format=json");
+  const response = responsefromAPI.data.results;
+  const hej = response.map(async (guy, index) => {
+    console.log("lalalalalalalala", guy);
+    const homeworld = guy.homeworld.substring(20);
+    const species = guy.species[0].substring(20);
+    const responseHomeworld = await starwars.get(`${homeworld}?format=json`);
+    const responseSpecies = await starwars.get(`${species}?format=json`);
+    return {
+      name: guy.name,
+      height: guy.height,
+      weight: guy.weight,
+      birthyear: guy.birth_year,
+      gender: guy.gender,
+      homeworld: responseHomeworld.data.name,
+      species: responseSpecies.data.name,
+      language: responseSpecies.data.language
+    };
+  });
+
+  Promise.all(hej).then(async hejsan => {
+    console.log("kek", hejsan);
+    await dispatch({
+      type: "FETCH_SW_CHARACTERS",
+      payload: hejsan
     });
+    await dispatch({
+      type: "FETCH_COMPLETED",
+      payload: true
+    });
+  });
+
+  console.log("dispatching fetch_compelte");
 };
 
-/*let homeWorldsResponseOne = response.data.results.map(guys => {
-  return guys.homeworld;
-});*/
-/*const test = homeWorldsResponseOne.map(async link => {
-  const substringed = link.substring(20);
-  console.log("SHOW ME BITCH", substringed);
-  const homeplanets = await starwars.get(`${substringed}?format=json`);
-  return homeplanets;
-});
-
-Promise.all(test).then(completed => {
-  const sup = completed.map(name => {
-    console.log(name);
-    return name.data.name;
-  });
-  //goFunction(sup);
-});
-
-/*const goFunction = async completed => {
-  console.log("jumping in here lol");
-  await dispatch({
-    type: "CHARS_HOMEWORLD",
-    payload: completed
-  });
-  await dispatch({
-    type: "FETCH_COMPLETED",
-    payload: true
-  });
-};*/
-
 export const fetchSWPlanets = getState => async dispatch => {
-  const response = await starwars.get("/planets/?format=json");
-  dispatch({ type: "FETCH_SW_PLANETS", payload: response.data.results });
+  const responseFromApi = await starwars.get("/planets/?format=json");
+  const response = responseFromApi.data.results;
+  const yo = response.map(async planet => {
+    console.log("kek", planet.name);
+    const planetResidents = await fetto(planet.residents);
+    return {
+      planetname: planet.name,
+      gravity: planet.gravity,
+      population: planet.population,
+      residents: planetResidents.join(", "),
+      climate: planet.climate
+    };
+  });
+  Promise.all(yo).then(async hejsan => {
+    console.log(hejsan);
+    await dispatch({
+      type: "FETCH_SW_PLANETS",
+      payload: hejsan
+    });
+  });
+};
+
+const fetto = async residents => {
+  const hej = residents.map(async residents => {
+    console.log("JULLE", residents);
+    const resident = await starwars.get(residents.substring(20));
+    return resident.data.name;
+  });
+  return await Promise.all(hej);
 };
 
 //FETCH SW SHIPS

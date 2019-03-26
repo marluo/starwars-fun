@@ -19,7 +19,7 @@ class Content extends React.Component {
     if (!this.props.fetchChecker) {
       //kollar om det SWChars har ett värde i sig, om den inte har det blir den false, alltså visas detta.
       return (
-        <div className="container">
+        <div className="bg-light-green dib br3 pa1 ma2 grow bw2 shadow-5">
           <div className="ui two column centered grid">
             <div class="ui active inverted dimmer">
               <div class="ui text loader">Loading</div>
@@ -28,17 +28,19 @@ class Content extends React.Component {
         </div>
       );
     }
-    if (!this.props.number) {
+    if (this.props.fetchChecker && !this.props.number[0]) {
+      console.log("testasdasdasdsdadasdasads", this.props.number);
       //detta visas om vi inte har passat in number något value via knapparna, då arrayen inte har några värden
       return (
-        <div className="ui two column centered grid">
-          Please Select an Option
+        <div>
+          <div>Please Select an Option</div>
         </div>
       );
     }
 
-    if (this.props.fetchChecker) {
+    if (this.props.number && this.props.fetchChecker) {
       //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
+      console.log(this.props.number);
       const SWCharsMerged = this.props.number;
       console.log("hej", SWCharsMerged);
       return SWCharsMerged.map(char => {
@@ -55,7 +57,7 @@ class Content extends React.Component {
   render() {
     //rendererar ut karaktärerna, loading och om man ska välja en option
     console.log("peppe", this.props.SWChars);
-    return <div className="ui cards">{this.renderCharacters()} </div>;
+    return <div className="tcx">{this.renderCharacters()} </div>;
   }
 }
 

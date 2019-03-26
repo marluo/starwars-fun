@@ -8,29 +8,31 @@ import fetchChecker from "../reducers/fetchChecker";
 class Header extends React.Component {
   render() {
     return (
-      <div className="container">
-        <h3 className="ui block header centered">
-          <div className="container">Star Wars Fun</div>
-          <button
-            className="ui black button centered"
-            onClick={() => {
-              this.props.CharsOrPlanets("planets");
-              this.props.onClickMenu(this.props.SWPlanets);
-            }}
-          >
-            Planets
-          </button>
-          <button
-            className="ui black button centered"
-            onClick={() => {
-              this.props.CharsOrPlanets("chars");
-              this.props.onClickMenu(this.props.SWChars);
-            }}
-          >
-            Characters
-          </button>
-          <button className="ui black button centered">Ships</button>
-        </h3>
+      <div className="tc paddingfix">
+        <div className="tc">
+          <img className="kuk" src={require(`./star_wars_logo.png`)} />
+        </div>
+        <a
+          className="f6 link dim br3 ph3 pv2 mb2 dib white bg-mid-gray sides"
+          onClick={() => {
+            this.props.CharsOrPlanets("planets");
+            this.props.onClickMenu(this.props.SWPlanets);
+          }}
+        >
+          Planets
+        </a>
+        <a
+          className="f6 link dim br3 ph3 pv2 mb2 dib white bg-mid-gray sides"
+          onClick={() => {
+            this.props.CharsOrPlanets("chars");
+            this.props.onClickMenu(this.props.SWChars);
+          }}
+        >
+          Characters
+        </a>
+        <a className="f6 link dim br3 ph3 pv2 mb2 dib white bg-mid-gray sides">
+          Ships
+        </a>
         {console.log(this.props)}
       </div>
     );
