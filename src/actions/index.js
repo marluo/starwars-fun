@@ -1,5 +1,7 @@
 import starwars from "../apis/starwars";
 
+/*FETCHING CHARACTERS */
+
 export const fetchSWCharacters = getState => async dispatch => {
   const responsefromAPI = await starwars.get("/people/?format=json");
   const response = responsefromAPI.data.results;
@@ -17,7 +19,8 @@ export const fetchSWCharacters = getState => async dispatch => {
       gender: guy.gender,
       homeworld: responseHomeworld.data.name,
       species: responseSpecies.data.name,
-      language: responseSpecies.data.language
+      language: responseSpecies.data.language,
+      stat: { bajskorv: "lol" }
     };
   });
 
@@ -36,6 +39,8 @@ export const fetchSWCharacters = getState => async dispatch => {
   console.log("dispatching fetch_compelte");
 };
 
+//*FETCHING PLANETS *//
+
 export const fetchSWPlanets = getState => async dispatch => {
   const responseFromApi = await starwars.get("/planets/?format=json");
   const response = responseFromApi.data.results;
@@ -46,12 +51,10 @@ export const fetchSWPlanets = getState => async dispatch => {
       planetname: planet.name,
       gravity: planet.gravity,
       population: planet.population,
-      residents: planetResidents.join(", "),
-      climate: planet.climate
+      stat: { residents: planetResidents.join(", "), climate: planet.climate }
     };
   });
   Promise.all(yo).then(async hejsan => {
-    console.log(hejsan);
     await dispatch({
       type: "FETCH_SW_PLANETS",
       payload: hejsan
@@ -69,6 +72,34 @@ const fetto = async residents => {
 };
 
 //FETCH SW SHIPS
+
+export const fetchSWShips = getState => async dispatch => {
+  const responseFromApi = await starwars.get(
+    "https://swapi.co/api/starships?format=json"
+  );
+  const shipsResponse = responseFromApi.data.results;
+  const allShips = shipsResponse.map(async ship => {
+    const pilotsPerShip = await fetchPilotNames(ship.pilots);
+    return {
+      name: ship.name,
+      model: ship.model,
+      manufacturer: ship.manufacturer,
+      passengers: ship.passengers,
+      max_atmosphering_speed: ship.max_atmosphering_speed,
+      hyperdrive_rating: ship.hyperdrive_rating,
+      pilots: pilotsPerShip
+    };
+  });
+  Promise.all(allShips).then(allShips => {});
+};
+
+const fetchPilotNames = async pilotsPerShip => {
+  const pilotsMap = pilotsPerShip.map(async pilot => {
+    const pilotNames = await starwars.get(pilot.substring(20));
+    return pilotNames.data.name;
+  });
+  return await Promise.all(pilotsMap);
+};
 
 export const onClickMenu = number => {
   return {

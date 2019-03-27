@@ -3,11 +3,16 @@ import { connect } from "react-redux";
 import tachyons from "tachyons";
 import "./ContentCard.css";
 
+//ATT GÖRA IMORGON: FIXA SÅ ATT JAG HAR EN RENDER BARA FÖR ALLT.
+// SE TILL ATT JAG HAR EN TILL PROP MED ALLT SOM INTE DELAR INFO, OCH ANVÄND SEDAN DENNA PROP ISTÄLLET FÖR ATT RENDERA UT ALLT!
+
+/*The Object.keys() method returns an array of a given object's own property names, in the same order as we get with a normal loop.*/
+
 class ContentCard extends React.Component {
   renderCharsOrPlanets() {
     if (this.props.numberState === "chars") {
       return (
-        <div>
+        <div className="selector">
           <h2>{this.props.info.name}</h2>
           <img
             alt="robots"
@@ -26,13 +31,18 @@ class ContentCard extends React.Component {
     if (this.props.numberState === "planets") {
       console.log("tetris", this.props.info);
       return (
-        <div className="tc bg-light-green dib br3 pa3 ma2 bw2 shadow-5 lul fl-w20">
+        <div className="selector">
           <div>
             <h4>{this.props.info.planetname}</h4>
-            <h4>climate: {this.props.info.climate}</h4>
+            <img
+              src={require(`../images/${this.props.info.planetname}.jpg`)}
+              className="br3"
+            />
             <h4>gravity:{this.props.info.gravity}</h4>
             <h4>population:{this.props.info.population}</h4>
-            <p>residents:{this.props.info.residents}</p>
+            <h4>climate:{this.props.info.climate}</h4>
+            <h4>residents:{this.props.info.residents}</h4>
+            <p className />
           </div>
         </div>
       );
@@ -41,7 +51,7 @@ class ContentCard extends React.Component {
 
   render() {
     return (
-      <div className="bg-light-silver dib br3 pa1 ma2 grow bw2 shadow-5 upper">
+      <div className="bg-light-silver dib br3 pa1 ma2 grow bw2 shadow-5 upper v-top">
         {this.renderCharsOrPlanets()}
       </div>
     );

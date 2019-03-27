@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchSWCharacters } from "../actions/";
 import { fetchSWPlanets } from "../actions";
 import { CharsOrPlanets } from "../actions";
+import { fetchSWShips } from "../actions";
 import ContentCard from "./ContentCard";
 
 class Content extends React.Component {
@@ -10,6 +11,7 @@ class Content extends React.Component {
     this.props.fetchSWCharacters();
     //kör actionen som fetchar karaktärer 2x från APIn
     this.props.fetchSWPlanets();
+    this.props.fetchSWShips();
     //kör actionen som fetchar planeter 2x från apin
   }
 
@@ -40,10 +42,10 @@ class Content extends React.Component {
 
     if (this.props.number && this.props.fetchChecker) {
       //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
-      console.log(this.props.number);
       const SWCharsMerged = this.props.number;
-      console.log("hej", SWCharsMerged);
       return SWCharsMerged.map(char => {
+        const bolle = Object.keys(char.stat);
+        console.log(bolle);
         return (
           <ContentCard
             char={char}
@@ -80,6 +82,7 @@ export default connect(
     //passar in actionen i denna komponent
     fetchSWCharacters: fetchSWCharacters,
     fetchSWPlanets: fetchSWPlanets,
-    CharsOrPlanets: CharsOrPlanets
+    CharsOrPlanets: CharsOrPlanets,
+    fetchSWShips: fetchSWShips
   }
 )(Content);
