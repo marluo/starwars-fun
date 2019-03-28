@@ -43,14 +43,14 @@ class Content extends React.Component {
     if (this.props.number && this.props.fetchChecker) {
       //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
       const SWCharsMerged = this.props.number;
+      console.log("Johan", SWCharsMerged);
       return SWCharsMerged.map(char => {
-        const bolle = Object.keys(char.stat);
-        console.log(bolle);
         return (
           <ContentCard
             char={char}
             charsOrPlanets={this.props.renderState}
             fetchChecker={this.props.fetchChecker}
+            other={char.other}
           />
         );
       });

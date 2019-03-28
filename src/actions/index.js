@@ -13,14 +13,15 @@ export const fetchSWCharacters = getState => async dispatch => {
     const responseSpecies = await starwars.get(`${species}?format=json`);
     return {
       name: guy.name,
-      height: guy.height,
-      weight: guy.weight,
-      birthyear: guy.birth_year,
-      gender: guy.gender,
-      homeworld: responseHomeworld.data.name,
-      species: responseSpecies.data.name,
-      language: responseSpecies.data.language,
-      stat: { bajskorv: "lol" }
+      other: {
+        height: guy.height,
+        weight: guy.mass,
+        birthyear: guy.birth_year,
+        gender: guy.gender,
+        homeworld: responseHomeworld.data.name,
+        species: responseSpecies.data.name,
+        language: responseSpecies.data.language
+      }
     };
   });
 
@@ -48,10 +49,14 @@ export const fetchSWPlanets = getState => async dispatch => {
     console.log("kek", planet.name);
     const planetResidents = await fetto(planet.residents);
     return {
-      planetname: planet.name,
-      gravity: planet.gravity,
-      population: planet.population,
-      stat: { residents: planetResidents.join(", "), climate: planet.climate }
+      name: planet.name,
+      other: {
+        residents: planetResidents.join(", "),
+        climate: planet.climate,
+        population: planet.population,
+        gravity: planet.gravity,
+        terrain: planet.terrain
+      }
     };
   });
   Promise.all(yo).then(async hejsan => {
