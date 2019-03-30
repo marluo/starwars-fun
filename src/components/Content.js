@@ -39,7 +39,7 @@ class Content extends React.Component {
         </div>
       );
     }
-    if (fetchChecker && number) {
+    if (fetchChecker && !number[0]) {
       console.log("testasdasdasdsdadasdasads", number);
       //detta visas om vi inte har passat in number något value via knapparna, då arrayen inte har några värden
       return (
@@ -52,7 +52,6 @@ class Content extends React.Component {
     }
 
     if (number) {
-      console.log("mackan", number);
       //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen;
       const SWCharsMerged = number.filter(char => {
         return char.name.toLowerCase().includes(searchfilter.toLowerCase());
