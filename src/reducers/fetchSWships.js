@@ -1,6 +1,6 @@
-export default (state = false, action) => {
+export default (state = null, action) => {
   switch (action.type) {
-    case "FETCH_COMPLETED":
+    case "FETCH_SW_SHIPS":
       return action.payload;
     default:
       return state;

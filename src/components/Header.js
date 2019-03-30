@@ -1,16 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onClickMenu } from "../actions/";
-import { CharsOrPlanets } from "../actions/";
+import { onClickMenu, fetchSWShips } from "../actions/";
+import { CharsOrPlanets, searchfilter } from "../actions/";
 import "./Header.css";
 import fetchChecker from "../reducers/fetchChecker";
 
 class Header extends React.Component {
+  onSearch(event) {
+    this.props.searchfilter(event.target.value);
+  }
+
   render() {
+    console.log("powertothe", this.props.SWShips);
     return (
       <div className="tc paddingfix">
         <div className="tc">
-          <img className="kuk" src={require(`./star_wars_logo.png`)} />
+          <img className="logo" src={require(`./star_wars_logo.png`)} />
         </div>
         <a
           className="f6 link dim br3 ph3 pv2 mb2 dib white bg-mid-gray sides"
@@ -30,10 +35,23 @@ class Header extends React.Component {
         >
           Characters
         </a>
-        <a className="f6 link dim br3 ph3 pv2 mb2 dib white bg-mid-gray sides">
+        <a
+          className="f6 link dim br3 ph3 pv2 mb2 dib white bg-mid-gray sides"
+          onClick={() => {
+            this.props.CharsOrPlanets("ships");
+            this.props.onClickMenu(this.props.SWShips);
+          }}
+        >
           Ships
         </a>
-        {console.log(this.props)}
+        <div className="pa2">
+          <input
+            className="pa2 ba b--grey bg-moon-gray"
+            type="search"
+            placeholder="search for something"
+            onChange={this.onSearch}
+          />
+        </div>
       </div>
     );
   }
@@ -47,7 +65,8 @@ const mapStateToProps = state => {
     SWChars: state.SWChars,
     SWPlanets: state.SWPlanets,
     CharsOrPlanets: state.CharsOrPlanets,
-    fetchChecker: state.fetchChecker
+    fetchChecker: state.fetchChecker,
+    SWShips: state.SWShips
   };
 };
 
@@ -55,6 +74,7 @@ export default connect(
   mapStateToProps,
   {
     onClickMenu: onClickMenu,
-    CharsOrPlanets: CharsOrPlanets
+    CharsOrPlanets: CharsOrPlanets,
+    searchfilter: searchfilter
   }
 )(Header);

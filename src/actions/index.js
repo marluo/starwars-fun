@@ -36,8 +36,6 @@ export const fetchSWCharacters = getState => async dispatch => {
       payload: true
     });
   });
-
-  console.log("dispatching fetch_compelte");
 };
 
 //*FETCHING PLANETS *//
@@ -46,7 +44,6 @@ export const fetchSWPlanets = getState => async dispatch => {
   const responseFromApi = await starwars.get("/planets/?format=json");
   const response = responseFromApi.data.results;
   const yo = response.map(async planet => {
-    console.log("kek", planet.name);
     const planetResidents = await fetto(planet.residents);
     return {
       name: planet.name,
@@ -87,15 +84,22 @@ export const fetchSWShips = getState => async dispatch => {
     const pilotsPerShip = await fetchPilotNames(ship.pilots);
     return {
       name: ship.name,
-      model: ship.model,
-      manufacturer: ship.manufacturer,
-      passengers: ship.passengers,
-      max_atmosphering_speed: ship.max_atmosphering_speed,
-      hyperdrive_rating: ship.hyperdrive_rating,
-      pilots: pilotsPerShip
+      other: {
+        model: ship.model,
+        manufacturer: ship.manufacturer,
+        passengers: ship.passengers,
+        max_atmosphering_speed: ship.max_atmosphering_speed,
+        hyperdrive_rating: ship.hyperdrive_rating,
+        pilots: pilotsPerShip
+      }
     };
   });
-  Promise.all(allShips).then(allShips => {});
+  Promise.all(allShips).then(async allShips => {
+    await dispatch({
+      type: "FETCH_SW_SHIPS",
+      payload: allShips
+    });
+  });
 };
 
 const fetchPilotNames = async pilotsPerShip => {
@@ -117,5 +121,12 @@ export const CharsOrPlanets = renderState => {
   return {
     type: "CHARS_OR_PLANETS",
     payload: renderState
+  };
+};
+
+export const searchfilter = value => {
+  return {
+    type: "SEARCH_FIELD",
+    payload: value
   };
 };

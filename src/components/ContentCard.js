@@ -10,22 +10,22 @@ import "./ContentCard.css";
 
 class ContentCard extends React.Component {
   renderCharsOrPlanets() {
-    if (this.props.numberState === "planets" || "chars") {
-      const otherKeys = Object.keys(this.props.other);
+    const { info, numberState, other } = this.props;
+    if (numberState === "planets" || "chars") {
+      const otherKeys = Object.keys(other);
       const statsInfo = otherKeys.map(otherKeys => {
-        console.log(this.props.info);
         return (
           <p>
-            {otherKeys}: {this.props.other[otherKeys]}
+            {otherKeys}: {other[otherKeys]}
           </p>
         );
       });
       return (
         <div className="selector">
           <div>
-            <h4>{this.props.info.planetname}</h4>
+            <h4>{info.name}</h4>
             <img
-              src={require(`../images/${this.props.info.name}.jpg`)}
+              src={require(`../images/${numberState}/${info.name}.jpg`)}
               className="br3"
             />
             <div>{statsInfo}</div>
@@ -49,9 +49,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     info: ownProps.char,
     numberState: ownProps.charsOrPlanets,
-    homeworld: ownProps.planets,
     fetchChecker: state.fetchChecker,
-    other: ownProps.other
+    other: ownProps.other,
+    searchfilter: ownProps.searchfilter
   };
 };
 

@@ -12,44 +12,59 @@ class Content extends React.Component {
     //kör actionen som fetchar karaktärer 2x från APIn
     this.props.fetchSWPlanets();
     this.props.fetchSWShips();
+
     //kör actionen som fetchar planeter 2x från apin
   }
 
   renderCharacters() {
-    console.log("triumf", this.props.fetchChecker);
-    console.log("testing KAKAKAKA", this.props.SWChars[0]);
-    if (!this.props.fetchChecker) {
+    const timezone = "America/Los Angeles";
+    for (let time in timezone) {
+      console.log(time);
+    }
+
+    const {
+      SWChars,
+      searchfilter,
+      number,
+      renderState,
+      fetchChecker,
+      SWShips,
+      SWPlanets
+    } = this.props;
+    if (!fetchChecker) {
       //kollar om det SWChars har ett värde i sig, om den inte har det blir den false, alltså visas detta.
       return (
-        <div className="bg-light-green dib br3 pa1 ma2 grow bw2 shadow-5">
-          <div className="ui two column centered grid">
-            <div class="ui active inverted dimmer">
-              <div class="ui text loader">Loading</div>
-            </div>
-          </div>
+        <div class="ui active dimmer">
+          <div class="ui text loader">Loading</div>
         </div>
       );
     }
-    if (this.props.fetchChecker && !this.props.number[0]) {
-      console.log("testasdasdasdsdadasdasads", this.props.number);
+    if (fetchChecker && number) {
+      console.log("testasdasdasdsdadasdasads", number);
       //detta visas om vi inte har passat in number något value via knapparna, då arrayen inte har några värden
       return (
-        <div>
-          <div>Please Select an Option</div>
+        <div class="dtc v-mid tc white ph3 ph4-l">
+          <h4 class="f6 f2-m f-subheadline-l fw6 tc">
+            Please select an option to display information
+          </h4>
         </div>
       );
     }
 
-    if (this.props.number && this.props.fetchChecker) {
-      //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen
-      const SWCharsMerged = this.props.number;
-      console.log("Johan", SWCharsMerged);
+    if (number) {
+      console.log("mackan", number);
+      //Kollar så att vi faktiskt har klickat på en knapp och passat in arrayerna actionen;
+      const SWCharsMerged = number.filter(char => {
+        return char.name.toLowerCase().includes(searchfilter.toLowerCase());
+      });
+
       return SWCharsMerged.map(char => {
+        console.log("peter", char);
         return (
           <ContentCard
             char={char}
-            charsOrPlanets={this.props.renderState}
-            fetchChecker={this.props.fetchChecker}
+            charsOrPlanets={renderState}
+            fetchChecker={fetchChecker}
             other={char.other}
           />
         );
@@ -58,7 +73,6 @@ class Content extends React.Component {
   }
   render() {
     //rendererar ut karaktärerna, loading och om man ska välja en option
-    console.log("peppe", this.props.SWChars);
     return <div className="tcx">{this.renderCharacters()} </div>;
   }
 }
@@ -69,8 +83,9 @@ const mapStateToProps = state => {
     SWChars: state.SWChars,
     SWPlanets: state.SWPlanets,
     renderState: state.CharsOrPlanets,
-    homeworld: state.homeworld,
-    fetchChecker: state.fetchChecker
+    fetchChecker: state.fetchChecker,
+    searchfilter: state.searchfilter,
+    SWShips: state.SWShips
     //vi får nu alla karaktärer från staten som vi hämtar via actionen. Vi använder denna för att
     //mappa alla ut på skärmen
   };
