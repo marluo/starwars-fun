@@ -6,6 +6,10 @@ import "./Header.css";
 import fetchChecker from "../reducers/fetchChecker";
 
 class Header extends React.Component {
+  componentDidMount() {
+    this.onSearch = this.onSearch.bind(this);
+  }
+
   onSearch(event) {
     this.props.searchfilter(event.target.value);
   }
